@@ -5,5 +5,149 @@ body {
   color: #000 !important;
   background-color: #fff !important;
   font-weight: 500 !important;
-  padding: 3rem;
+  width: inherit;
+}
+
+.div-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.div-def-padding {
+  padding: 3rem 0rem 3rem 0rem;
+}
+
+#loading {
+  display: none;
+}
+
+.social-icons {
+  font-size: 2.5rem;
+  padding: 10px;
+}
+
+.social-icons>a>i {
+  margin-right: 10px;
+  color: white;
+}
+
+td, th {
+  padding: 1rem !important;
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.button {
+  background-color: #03a9f4;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button1 {
+  background-color: white;
+  color: black;
+  border: 2px solid #03a9f4;
+}
+
+.button1:hover {
+  background-color: #03a9f4;
+  color: white;
+}
+
+/*styling input button*/
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfile+label {
+  max-width: 80%;
+  font-size: 16px;
+  /* 20px */
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  padding: 10px 20px;
+  border: solid 2px #03a9f4;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  border-radius: 5px;
+  /* 10px 20px */
+}
+
+.no-js .inputfile+label {
+  display: none;
+}
+
+.inputfile:focus+label,
+.inputfile.has-focus+label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+.inputfile+label * {
+  /* pointer-events: none; */
+  /* in case of FastClick lib use */
+}
+
+.inputfile+label svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  fill: currentColor;
+  margin-top: -0.25em;
+  /* 4px */
+  margin-right: 0.25em;
+  /* 4px */
+}
+
+.inputfile-1+label {
+  color: blakc;
+  background-color: white;
+}
+
+.inputfile-1:focus+label,
+.inputfile-1.has-focus+label,
+.inputfile-1+label:hover {
+  background-color: #03a9f4;
+  color: white;
+}
+
+.td-lables {
+  font-size: 16px;
+  font-weight: 500;
+}
+h1,h2,h3{
+  margin-top: 10px !important;
+  margin-bottom: 15px !important;
+}
+ol, ul {
+    margin-top: 20px !important;
+    margin-bottom: 10px;
 }

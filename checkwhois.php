@@ -1,3 +1,7 @@
+<?php include("assets/layouts/header.php");?>
+<?php include("assets/layouts/titles.php");?>
+<title><?php echo $resultPageTitle; ?></title>
+<?php include("assets/layouts/body.php");?>
 <?php
 session_start();
 require("whoisServer.php");
@@ -104,6 +108,25 @@ if ($finalarray) {
     exit;
 }
 */
+echo "<div class=\"container-fluid div-def-padding\">";
+echo "<div class=\"row h-100\">";
+echo "<div class=\"col-md-12 col-lg-12\">";
+echo "<div class=\"card card-block w-25\">";
 echo "<h2 align=\"center\">Records Succsessfully Factched</h2>";
-echo "<h4 align=\"center\"><a href=\"export.php\">Export Spreadsheet</a></h4>";
+echo "<hr/>";
+echo "<h4 align=\"center\"><a href=\"export.php\" style=\"color: #03A9F4; text-decoration: none !important; padding: 10px; border: solid 2px #03A9F4;border-radius: 5px;\">Export Spreadsheet</a></h4>";
+echo "</div>";
+echo "</div>";
+echo "</div>";
+echo "</div>";
 ?>
+<div class="container-fluid div-def-padding div-center" style="padding-top:0px !important">
+  <div class="row h-100">
+    <div class="col-md-12 col-lg-12">
+       <div class="card card-block w-25">
+         <a href="index.php"><< Go Back to home</a>
+       </div>
+     </div>
+   </div>
+</div>
+  <?php include("assets/layouts/footer.php"); ?>
