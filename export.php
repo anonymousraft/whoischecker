@@ -1,4 +1,4 @@
-<?php 
+<?php
 //Exporting data to excel sheet
 session_start();
 $fileName = "domain_data" . rand(1,100) . ".xls";
@@ -26,6 +26,6 @@ if ($_SESSION["domain_data"]) {
         array_walk($row, 'filterData');
         echo implode("\t", array_values($row)) . "\n";
     }
-    exit;           
+    exit;
 }
 ?>
