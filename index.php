@@ -23,6 +23,7 @@
          <ul>
          <li>This tool support only <b>CSV Files</b>, So upload a CSV files that has domain names in the first column.</p>
          <li>There should be only one domain name in each row. <b>And That's it</b>. You are good to go.</li>
+         <li style="margin-top: 10px;"><a href="downloads/list-of-domains.csv">Downlaod sample csv file.</a></li>
          </ul>
        </div>
      </div>
