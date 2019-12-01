@@ -1,4 +1,4 @@
 <?php
-$homePageTitle = "Whois Checker 1.0 by HS Rathore";
-$resultPageTitle = "Results..."; 
+$homePageTitle = "Whois Checker 1.0.0 by HS Rathore";
+$resultPageTitle = "Results...";
 ?>
