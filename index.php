@@ -61,7 +61,7 @@
       <div class="col-md-12 col-lg-12">
          <div class="card card-block w-25">
            <p style="color:white;">This project is made possible by the PHP WHOIS script provided by Michael on <a href="https://github.com/doorman1/Whois-Lookup" target="_blank" style="color:white;"><i>Github</i></a></p>
-           <p style="color:white;">Made with <i class="far fa-heart"></i> by Hitendra</p>
+           <p style="color:white;">Made with <i class="far fa-heart"></i> by <a href="https://hitendra.co" target="_blank" style="color:white;">Hitendra</a>.</p>
          </div>
        </div>
      </div>
