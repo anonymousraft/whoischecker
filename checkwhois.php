@@ -1,132 +1,146 @@
-<?php include("assets/layouts/header.php");?>
-<?php include("assets/layouts/titles.php");?>
-<title><?php echo $resultPageTitle; ?></title>
-<?php include("assets/layouts/body.php");?>
 <?php
 session_start();
-require("whoisServer.php");
+
+if(!$_SESSION['upload'])
+{
+    echo 'Please upload a CSV file first. <a href="index.php"><< Home</a>';
+    die();
+}
+
+require_once "assets/layouts/header.php";
+
+require_once "assets/layouts/titles.php";
+
+echo '<title>'.$resultPageTitle.'</title>';
+
+require_once "assets/layouts/body.php";
+
+require_once "whoisServer.php";
+
 $whois=new Whois;
-//Reading CSV File
+
+/*
+Reading CSV File
+ */
 $row = 1;
-if (($handle = fopen("upload/domains.csv", "r")) !== false) {
-    while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+if (($handle = fopen("upload/domains.csv", "r")) !== false) 
+{
+    while (($data = fgetcsv($handle, 1000, ",")) !== false) 
+    {
         $num = count($data);
         $row++;
-        for ($c=0; $c < $num; $c++) {
 
-            //echo $data[$c] . "<br /><br />\n";
-            //calling the whois lookup function
+        for ($c=0; $c < $num; $c++) 
+        {
+
             $result = $whois->whoislookup($data[$c]);
             $whoisrecord = substr($result, 0, strpos($result, "<<<"));
-            //$whatIWant = substr($variable, strpos($variable, "Updated Date:"));
 
-            //Getting Domain Name
-            list($domainname) = explode('Registry', $whoisrecord);
-            //list($SoleDomain) = explode('Domain Name:', $domainname);
-            $SoleDomain = substr($domainname, strpos($domainname, "Domain Name:")+13);
-            // echo trim($SoleDomain)."<br/>";//variable containing domain name.
+            $domain_name = get_domain_data($whoisrecord,'Registry','Domain Name:',13);
+            $whois_server = get_domain_data($whoisrecord,'Registrar URL','Registrar WHOIS Server:',24);
+            $whois_server_url = get_domain_data($whoisrecord,'Updated Date','Registrar URL',14);
 
-            //Getting WhoisServer
-            list($WhoisServer) = explode('Registrar URL', $whoisrecord);
-            $whatIWant = substr($WhoisServer, strpos($WhoisServer, "Registrar WHOIS Server:")+24);
-            // echo trim($whatIWant)."<br/>";
+            $update = get_date_time(get_domain_data($whoisrecord,'Creation Date','Updated Date:',14));
+            $update_date = $update['date'];
+            $update_time = $update['time'];
 
-            //Getting Whois Server URL
-            $WhoisServerURL = substr($whoisrecord, strpos($whoisrecord, "Registrar URL"));
-            list($WhoisServerURLFinal) = explode('Updated Date', $WhoisServerURL);
-            $onlyServerURL = substr($WhoisServerURLFinal, strpos($WhoisServerURLFinal, "Registrar URL")+14);
-            //echo trim($onlyServerURL)."<br/>";
+            $created = get_date_time(get_domain_data($whoisrecord,'Registry Expiry Date','Creation Date:',14));
+            $created_date = $created['date'];
+            $created_time = $created['time'];
 
-            //getting updated date
-            $UpdatedDate = substr($whoisrecord, strpos($whoisrecord, "Updated Date"));
-            list($UpdatedDatewithtime) = explode('Creation Date', $UpdatedDate);
-            list($UpdatedDatewithouttime) = explode('T', $UpdatedDatewithtime);
-            $SoleUpdatedDate = substr($UpdatedDatewithouttime, strpos($UpdatedDatewithouttime, "Updated Date:")+14);
-            //echo trim($SoleUpdatedDate)."<br/>";
 
-            //Creation Date:
-            $CreatedDate = substr($whoisrecord, strpos($whoisrecord, "Creation Date"));
-            list($CreationDatewithtime) = explode('Registry Expiry Date', $CreatedDate);
-            list($CreationDatewithouttime) = explode('T', $CreationDatewithtime);
-            $SoleCreationdDate = substr($CreationDatewithouttime, strpos($CreationDatewithouttime, "Creation Date:")+14);
-            //echo trim($SoleCreationdDate)."<br/>";
-
-            //Expiery Date:
-            $ExpiryDate = substr($whoisrecord, strpos($whoisrecord, "Expiry Date"));
-            list($ExpiryDatewithtime) = explode('Registrar Registration Expiration Date', $ExpiryDate);
-            list($ExpiryDatewithouttime) = explode('T', $ExpiryDatewithtime);
-            $SoleExpiryDate = substr($ExpiryDatewithouttime, strpos($ExpiryDatewithouttime, "Expiry Date:")+13);
-            //echo trim($SoleExpiryDate)."<br/>";
-
-            //Data Prepration for Export
+            $expiry_first_half = get_domain_data($whoisrecord,'Registrar Registration Expiration Date','Expiry Date:',13);
+            $expiry = get_date_time(addition_cut($expiry_first_half, 'Registrar'));
+            $expiry_date = $expiry['date'];
+            $expiry_time = $expiry['time'];
+            
             $export_data = array(
-                'Domain Name' => trim($SoleDomain),
-                'Whois Server URL' => trim($whatIWant),
-                'Registrar URL' => trim($onlyServerURL),
-                'Updated Date' => trim($SoleUpdatedDate),
-                'Creation Date' => trim($SoleCreationdDate),
-                'Expiry Date' => trim($SoleExpiryDate)
-        );
-            $finalarray[] = $export_data; //Array with all the extracted data.
-            $_SESSION["domain_data"] = $finalarray;
-
-            //echo "<br /><br />\n";
-
-            //echo $whoisrecord;
+                'Domain Name' => trim($domain_name),
+                'Whois Server' => trim($whois_server),
+                'Registrar URL' => trim($whois_server_url),
+                'Update Date' => trim($update_date),
+                'Update Time' => trim($update_time),
+                'Creation Date' => trim($created_date),
+                'Creation Time' => trim($created_time),
+                'Expiry Date' => trim($expiry_date),
+                'Expiry Time' => trim($expiry_time)
+            );
+            $all_data[] = $export_data; //Array with all the extracted data.
         }
     }
+
+    $_SESSION["domain_data"] = $all_data;
+
     fclose($handle);
 }
 
-//Exporting data to excel sheet
-/*
-$fileName = "domain_data" . rand(1,100) . ".xls";
-
-if ($finalarray) {
-    function filterData($str) {
-        $str = preg_replace("/\t/", "\\t", $str);
-        $str = preg_replace("/\r?\n/", "\\n", $str);
-        if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
-    }
-
-    // headers for download
-   header("Content-Disposition: attachment; filename=\"$fileName\"");
-   header("Content-Type: application/vnd.ms-excel");
-
-
-    $flag = false;
-    foreach($finalarray as $row) {
-        if(!$flag) {
-            // display column names as first row
-            echo implode("\t", array_keys($row)) . "\n";
-            $flag = true;
-        }
-        // filter data
-        array_walk($row, 'filterData');
-        echo implode("\t", array_values($row)) . "\n";
-    }
-    exit;
+function get_domain_data($whois, $str_cut_from, $str_cut,$int_pos)
+{
+    list($filter_text) = explode($str_cut_from, $whois);
+    $result = substr($filter_text, strpos($filter_text, $str_cut)+$int_pos);
+    return $result;
 }
-*/
-echo "<div class=\"container-fluid div-def-padding\">";
-echo "<div class=\"row h-100\">";
-echo "<div class=\"col-md-12 col-lg-12\">";
-echo "<div class=\"card card-block w-25\">";
-echo "<h2 align=\"center\">Records Succsessfully Factched</h2>";
-echo "<hr/>";
-echo "<h4 align=\"center\"><a href=\"export.php\" style=\"color: #03A9F4; text-decoration: none !important; padding: 10px; border: solid 2px #03A9F4;border-radius: 5px;\">Export Spreadsheet</a></h4>";
-echo "</div>";
-echo "</div>";
-echo "</div>";
-echo "</div>";
+
+function addition_cut($string_to_cut, $str_by_cut){
+
+    list($filter_text) = explode($str_by_cut, $string_to_cut);
+    $result = (string) $filter_text;
+
+    return $result;
+}
+
+function get_date_time($raw_date){
+
+    $date = date('c', strtotime($raw_date));
+
+    $t_obj = new DateTime($date);
+    $date = $t_obj->format('Y-m-d');
+    $time = $t_obj->format('H:i:s');
+    $timezone = $t_obj->getTimezone()->getName(); 
+
+    return [
+        'date' => $date,
+        'time' => $time,
+        'timezone' => $timezone
+    ];
+}
 ?>
+<div class="container-fluid div-def-padding">
+    <div class="row h-100">
+        <div class="col-md-12 col-lg-12">
+            <h2 align="center">Records Succsessfully Factched</h2>
+            <table class="records-table">
+                <?php
+                echo '<tr><td>Domain Name</td><td>Whois Registrar</td><td>Registrar URL</td><td>Update Date</td><td>Update Time</td><td>Created Date</td><td>Created Time</td><td>Expiry Date</td><td>Expiry Time</td></tr>';
+                foreach ($all_data as $data) 
+                {
+                    echo '<tr>';
+                    foreach($data as $col_head => $value)
+                    {
+                        echo '<td>'. $value .'</td>';
+                    }     
+
+                    echo '</tr>';
+                } 
+
+                ?>
+            </table>
+            <hr/>
+        </div>
+        <div class="col-md-12 col-lg-12">
+            <div class="card card-block w-25">
+                <h4 align="center"><a href="export.php" style="color: #03A9F4; text-decoration: none !important; padding: 10px; border: solid 2px #03A9F4;border-radius: 5px;">Export Spreadsheet</a></h4>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container-fluid div-def-padding div-center" style="padding-top:0px !important">
   <div class="row h-100">
     <div class="col-md-12 col-lg-12">
        <div class="card card-block w-25">
          <a href="index.php"><< Go Back to home</a>
-       </div>
      </div>
-   </div>
+ </div>
 </div>
-  <?php include("assets/layouts/footer.php"); ?>
+</div>
+<?php include("assets/layouts/footer.php"); ?>

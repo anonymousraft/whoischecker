@@ -151,3 +151,10 @@ ol, ul {
     margin-top: 20px !important;
     margin-bottom: 10px;
 }
+table.records-table{
+  border: solid 1px #30A9F4;
+}
+table.records-table tr td{
+ border: solid 1px #30A9F4;
+ padding:0.3rem !important; 
+}
