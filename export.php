@@ -2,6 +2,12 @@
 //Exporting data to excel sheet
 session_start();
 
+if(!isset($_SESSION["domain_data"]))
+{
+    echo 'No data found in the records, Please upload file from <a href="index.php">here</a>.';
+    die();
+}
+
 $fileName = "domain_data" . rand(1,100) . ".xls";
 
 if ($_SESSION["domain_data"]) 
@@ -33,6 +39,8 @@ if ($_SESSION["domain_data"])
         array_walk($row, 'filterData');
         echo implode("\t", array_values($row)) . "\n";
     }
+    $_SESSION = array();
+    session_destroy();
     exit;
 }
 ?>

@@ -1,4 +1,12 @@
-<?php 
+<?php
+session_start();
+
+if(!$_SESSION['upload'])
+{
+    echo 'Please upload a CSV file first. <a href="index.php"><< Home</a>';
+    die();
+}
+
 require_once "assets/layouts/header.php";
 
 require_once "assets/layouts/titles.php";
@@ -8,8 +16,6 @@ echo '<title>'.$resultPageTitle.'</title>';
 require_once "assets/layouts/body.php";
 
 require_once "whoisServer.php";
-
-session_start();
 
 $whois=new Whois;
 
@@ -26,7 +32,7 @@ if (($handle = fopen("upload/domains.csv", "r")) !== false)
 
         for ($c=0; $c < $num; $c++) 
         {
-            
+
             $result = $whois->whoislookup($data[$c]);
             $whoisrecord = substr($result, 0, strpos($result, "<<<"));
 
@@ -84,7 +90,7 @@ function addition_cut($string_to_cut, $str_by_cut){
 }
 
 function get_date_time($raw_date){
-    
+
     $date = date('c', strtotime($raw_date));
 
     $t_obj = new DateTime($date);
@@ -96,43 +102,45 @@ function get_date_time($raw_date){
         'date' => $date,
         'time' => $time,
         'timezone' => $timezone
-        ];
+    ];
 }
 ?>
 <div class="container-fluid div-def-padding">
-<div class="row h-100">
-<div class="col-md-12 col-lg-12">
-    <table>
-        <?php
-        echo '<tr><td>Domain Name</td><td>Whois Registrar</td><td>Registrar URL</td><td>Update Date</td><td>Update Time</td><td>Created Date</td><td>Created Time</td><td>Expiry Date</td><td>Expiry Time</td></tr>';
-        foreach ($all_data as $data) 
-        {
-            echo '<tr>';
-            foreach($data as $col_head => $value)
-            {
-                echo '<td>'. $value .'</td>';
-            }     
-             
-            echo '</tr>';
-        } 
+    <div class="row h-100">
+        <div class="col-md-12 col-lg-12">
+            <h2 align="center">Records Succsessfully Factched</h2>
+            <table class="records-table">
+                <?php
+                echo '<tr><td>Domain Name</td><td>Whois Registrar</td><td>Registrar URL</td><td>Update Date</td><td>Update Time</td><td>Created Date</td><td>Created Time</td><td>Expiry Date</td><td>Expiry Time</td></tr>';
+                foreach ($all_data as $data) 
+                {
+                    echo '<tr>';
+                    foreach($data as $col_head => $value)
+                    {
+                        echo '<td>'. $value .'</td>';
+                    }     
 
-        ?>
-    </table>
-<div class="card card-block w-25">
-<h2 align="center">Records Succsessfully Factched</h2>
-<hr/>
-<h4 align="center"><a href="export.php" style="color: #03A9F4; text-decoration: none !important; padding: 10px; border: solid 2px #03A9F4;border-radius: 5px;">Export Spreadsheet</a></h4>
-</div>
-</div>
-</div>
+                    echo '</tr>';
+                } 
+
+                ?>
+            </table>
+            <hr/>
+        </div>
+        <div class="col-md-12 col-lg-12">
+            <div class="card card-block w-25">
+                <h4 align="center"><a href="export.php" style="color: #03A9F4; text-decoration: none !important; padding: 10px; border: solid 2px #03A9F4;border-radius: 5px;">Export Spreadsheet</a></h4>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="container-fluid div-def-padding div-center" style="padding-top:0px !important">
   <div class="row h-100">
     <div class="col-md-12 col-lg-12">
-     <div class="card card-block w-25">
-       <a href="index.php"><< Go Back to home</a>
-   </div>
-</div>
+       <div class="card card-block w-25">
+         <a href="index.php"><< Go Back to home</a>
+     </div>
+ </div>
 </div>
 </div>
 <?php include("assets/layouts/footer.php"); ?>
