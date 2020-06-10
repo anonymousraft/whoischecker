@@ -28,6 +28,12 @@ if (isset($_FILES["file"]))
             }
             else 
             {
+                $upload_dir = 'upload';
+                if(!is_dir($upload_dir))
+                {
+                    mkdir($upload_dir, 0777, true);
+                }
+
                 $storagename = "domains.csv";
                 move_uploaded_file($_FILES["file"]["tmp_name"], "upload/" . $storagename);
 

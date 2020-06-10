@@ -42,6 +42,7 @@ foreach($_SESSION["domain_data"] as $row)
 //deleting uplaoded file
 $uploaded_file = "upload/domains.csv";
 unlink($uploaded_file);
+rmdir('upload');
 
 $_SESSION = array();
 session_destroy();
