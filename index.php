@@ -25,7 +25,30 @@ require_once "assets/layouts/body.php";
   <div class="row h-100">
     <div class="col-md-12 col-lg-12">
      <div class="card card-block w-25">
-       <h2>Basic Points to use tool properly</h2>
+       <h2>Whois Checker for Single Domain name</h2>
+       </div>
+     </div>
+   </div>
+ </div>
+</div>
+ <div class="container-fluid div-def-padding" style="padding-top:0px !important">
+  <div class="row h-100">
+    <div class="col-md-12 col-lg-12 custom-border-12">
+     <div class="card card-block w-25 custom-border-box">
+      <h4 align="center">WHOIS Checker</h4>
+      <form method="post" action="domainwhois.php">
+        <label for="domain_name">Domain/URL:</label>
+        <input type="text" name="domain_name" placeholder="Enter Domain Name or URL">
+        <input type="submit" name="submit" value="Check Whois">
+      </form>
+    </div>
+  </div>
+</div>
+<div class="container-fluid div-def-padding div-center" style="text-align:left !important;">
+  <div class="row h-100">
+    <div class="col-md-12 col-lg-12">
+     <div class="card card-block w-25">
+       <h2>Basic Points to use Bulk tool properly</h2>
        <h3>Preparing CSV File</h3>
        <ul>
          <li>This tool support only <b>CSV Files</b>, So upload a CSV files that has domain names in the first column.</p>
@@ -36,10 +59,12 @@ require_once "assets/layouts/body.php";
      </div>
    </div>
  </div>
+</div>
  <div class="container-fluid div-def-padding" style="padding-top:0px !important">
   <div class="row h-100">
-    <div class="col-md-12 col-lg-12">
-     <div class="card card-block w-25">
+    <div class="col-md-12 col-lg-12 custom-border-12">
+     <div class="card card-block w-25 custom-border-box">
+      <h4 align="center">Bulk Domains from a CSV File</h4>
       <table align="center">
         <tr>
           <td width="20%"><span class="td-lables">Select file</span></td>

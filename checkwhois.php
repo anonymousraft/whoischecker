@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-if(!$_SESSION['upload'])
-{
-    echo 'Please upload a CSV file first. <a href="index.php"><< Home</a>';
-    die();
-}
-
 require_once "assets/layouts/header.php";
 
 require_once "assets/layouts/titles.php";
@@ -15,9 +9,19 @@ echo '<title>'.$resultPageTitle.'</title>';
 
 require_once "assets/layouts/body.php";
 
+if(!$_SESSION['upload'])
+{
+    echo 'Please upload a CSV file first. <a href="index.php"><< Home</a>';
+    die();
+}
+
 require_once "whoisServer.php";
 
+require_once "filterText.php";
+
 $whois=new Whois;
+
+$filter_text = new filterText();
 
 /*
 Reading CSV File
@@ -33,37 +37,9 @@ if (($handle = fopen("upload/domains.csv", "r")) !== false)
         for ($c=0; $c < $num; $c++) 
         {
             $result = $whois->whoislookup($data[$c]);
-            $whoisrecord = substr($result, 0, strpos($result, "<<<"));
 
-            $domain_name =  strtolower(get_domain_data($whoisrecord,'Registry','Domain Name:',13));
-            $whois_server = get_domain_data($whoisrecord,'Registrar URL','Registrar WHOIS Server:',24);
-            $whois_server_url = get_domain_data($whoisrecord,'Updated Date','Registrar URL',14);
-
-            $update = get_date_time(get_domain_data($whoisrecord,'Creation Date','Updated Date:',14));
-            $update_date = $update['date'];
-            $update_time = $update['time'];
-
-            $created = get_date_time(get_domain_data($whoisrecord,'Registry Expiry Date','Creation Date:',14));
-            $created_date = $created['date'];
-            $created_time = $created['time'];
-
-
-            $expiry_first_half = get_domain_data($whoisrecord,'Registrar Registration Expiration Date','Expiry Date:',13);
-            $expiry = get_date_time(addition_cut($expiry_first_half, 'Registrar'));
-            $expiry_date = $expiry['date'];
-            $expiry_time = $expiry['time'];
-            
-            $export_data = array(
-                'Domain Name' => trim($domain_name),
-                'Whois Server' => trim($whois_server),
-                'Registrar URL' => trim($whois_server_url),
-                'Update Date' => trim($update_date),
-                'Update Time' => trim($update_time),
-                'Creation Date' => trim($created_date),
-                'Creation Time' => trim($created_time),
-                'Expiry Date' => trim($expiry_date),
-                'Expiry Time' => trim($expiry_time)
-            );
+            $export_data = $filter_text->get_filtered_data($result);
+           
             $all_data[] = $export_data; //Array with all the extracted data.
         }
     }
@@ -71,37 +47,6 @@ if (($handle = fopen("upload/domains.csv", "r")) !== false)
     $_SESSION["domain_data"] = $all_data;
 
     fclose($handle);
-}
-
-function get_domain_data($whois, $str_cut_from, $str_cut,$int_pos)
-{
-    list($filter_text) = explode($str_cut_from, $whois);
-    $result = substr($filter_text, strpos($filter_text, $str_cut)+$int_pos);
-    return $result;
-}
-
-function addition_cut($string_to_cut, $str_by_cut){
-
-    list($filter_text) = explode($str_by_cut, $string_to_cut);
-    $result = (string) $filter_text;
-
-    return $result;
-}
-
-function get_date_time($raw_date){
-
-    $date = date('c', strtotime($raw_date));
-
-    $t_obj = new DateTime($date);
-    $date = $t_obj->format('Y-m-d');
-    $time = $t_obj->format('H:i:s');
-    $timezone = $t_obj->getTimezone()->getName(); 
-
-    return [
-        'date' => $date,
-        'time' => $time,
-        'timezone' => $timezone
-    ];
 }
 ?>
 <div class="container-fluid div-def-padding">
@@ -117,11 +62,9 @@ function get_date_time($raw_date){
                     foreach($data as $col_head => $value)
                     {
                         echo '<td>'. $value .'</td>';
-                    }     
-
+                    }
                     echo '</tr>';
-                } 
-
+                }
                 ?>
             </table>
             <hr/>

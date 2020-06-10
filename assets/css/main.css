@@ -163,3 +163,42 @@ table.records-table tr th{
   border: solid 1px #30A9F4;
  padding:0.3rem !important; 
 }
+
+.custom-border-box{
+  border: 1px solid #30a9f4;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 3rem;
+    text-align: initial;
+}
+
+.custom-border-12{
+  align-content: center;
+    text-align: center;
+}
+
+/*Form style*/
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #30a9f4;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 100%;
+  background-color: #30a9f4;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #67c0f7;
+}
