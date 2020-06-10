@@ -10,37 +10,41 @@ if(!isset($_SESSION["domain_data"]))
 
 $fileName = "domain_data" . rand(1,100) . ".xls";
 
-if ($_SESSION["domain_data"]) 
+
+function filterData($str) 
 {
-    function filterData($str) 
-    {
-        $str = preg_replace("/\t/", "\\t", $str);
-        $str = preg_replace("/\r?\n/", "\\n", $str);
-        if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
-    }
-
-
-    header("Content-Disposition: attachment; filename=\"$fileName\"");
-    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Cache-Control: max-age=0");
-
-
-    $flag = false;
-
-    foreach($_SESSION["domain_data"] as $row) 
-    {
-        if(!$flag) 
-        {
-            // display column names as first row
-            echo implode("\t", array_keys($row)) . "\n";
-            $flag = true;
-        }
-        // filter data
-        array_walk($row, 'filterData');
-        echo implode("\t", array_values($row)) . "\n";
-    }
-    $_SESSION = array();
-    session_destroy();
-    exit;
+    $str = preg_replace("/\t/", "\\t", $str);
+    $str = preg_replace("/\r?\n/", "\\n", $str);
+    if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
 }
+
+
+header("Content-Disposition: attachment; filename=\"$fileName\"");
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Cache-Control: max-age=0");
+
+
+$flag = false;
+
+foreach($_SESSION["domain_data"] as $row) 
+{
+    if(!$flag) 
+    {
+            // display column names as first row
+        echo implode("\t", array_keys($row)) . "\n";
+        $flag = true;
+    }
+        // filter data
+    array_walk($row, 'filterData');
+    echo implode("\t", array_values($row)) . "\n";
+}
+
+//deleting uplaoded file
+$uploaded_file = "upload/domains.csv";
+unlink($uploaded_file);
+
+$_SESSION = array();
+session_destroy();
+exit;
+
 ?>

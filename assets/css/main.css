@@ -158,3 +158,8 @@ table.records-table tr td{
  border: solid 1px #30A9F4;
  padding:0.3rem !important; 
 }
+
+table.records-table tr th{
+  border: solid 1px #30A9F4;
+ padding:0.3rem !important; 
+}

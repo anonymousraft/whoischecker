@@ -96,7 +96,7 @@ require_once "assets/layouts/body.php";
 <script type="text/javascript">
   'use strict';
 
-  ;( function( $, window, document, undefined )
+  ( function( $, window, document, undefined )
   {
    $( '.inputfile' ).each( function()
    {

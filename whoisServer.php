@@ -29,7 +29,7 @@ class Whois
         "tv"                =>  array("whois.nic.tv","tvwhois.verisign-grs.com"),
         "travel"            =>  array("whois.nic.travel"),
         "name"              =>  array("whois.nic.name"),
-        "in"                =>  array("whois.inregistry.net","whois.registry.in"),
+        "in"                =>  array("whois.registry.in"),
         "me"                =>  array("whois.nic.me","whois.meregistry.net"),
         "at"                =>  array("whois.nic.at"),
         "be"                =>  array("whois.dns.be"),
@@ -149,19 +149,32 @@ class Whois
 public function whoislookup($domain)
 {
         $domain = trim($domain); //remove space from start and end of domain
+
+        //remove traling slash
+        if(substr($domain, -1) == '/') 
+        {
+            $domain = substr($domain, 0, -1);
+        }
+
+        // remove http:// if included
         if (substr(strtolower($domain), 0, 7) == "http://") 
         {
             $domain = substr($domain, 7);
         }
 
-        // remove http:// if included
+        // remove https:// if included
+        if (substr(strtolower($domain), 0, 8) == "https://") 
+        {
+            $domain = substr($domain, 8);
+        }
+
+        //remove www from domain
         if (substr(strtolower($domain), 0, 4) == "www.") 
         {
             $domain = substr($domain, 4);
         }
 
-        //remove www from domain
-        if (preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/", $domain)) 
+        if (preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/", $domain))
         {
             return $this->queryWhois("whois.lacnic.net", $domain);
         } 

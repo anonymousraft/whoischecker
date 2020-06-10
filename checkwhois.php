@@ -32,11 +32,10 @@ if (($handle = fopen("upload/domains.csv", "r")) !== false)
 
         for ($c=0; $c < $num; $c++) 
         {
-
             $result = $whois->whoislookup($data[$c]);
             $whoisrecord = substr($result, 0, strpos($result, "<<<"));
 
-            $domain_name = get_domain_data($whoisrecord,'Registry','Domain Name:',13);
+            $domain_name =  strtolower(get_domain_data($whoisrecord,'Registry','Domain Name:',13));
             $whois_server = get_domain_data($whoisrecord,'Registrar URL','Registrar WHOIS Server:',24);
             $whois_server_url = get_domain_data($whoisrecord,'Updated Date','Registrar URL',14);
 
@@ -111,7 +110,7 @@ function get_date_time($raw_date){
             <h2 align="center">Records Succsessfully Factched</h2>
             <table class="records-table">
                 <?php
-                echo '<tr><td>Domain Name</td><td>Whois Registrar</td><td>Registrar URL</td><td>Update Date</td><td>Update Time</td><td>Created Date</td><td>Created Time</td><td>Expiry Date</td><td>Expiry Time</td></tr>';
+                echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th></tr>';
                 foreach ($all_data as $data) 
                 {
                     echo '<tr>';
