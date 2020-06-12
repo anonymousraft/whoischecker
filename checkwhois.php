@@ -27,9 +27,9 @@ $filter_text = new filterText();
 Reading CSV File
  */
 $row = 1;
-if (($handle = fopen("upload/domains.csv", "r")) !== false) 
+if (($handle = fopen("upload/domains.csv", "r")) !== false)
 {
-    while (($data = fgetcsv($handle, 1000, ",")) !== false) 
+    while (($data = fgetcsv($handle, 1000, ",")) !== false)
     {
         $num = count($data);
         $row++;
