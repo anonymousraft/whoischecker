@@ -38,7 +38,25 @@ if (($handle = fopen("upload/domains.csv", "r")) !== false)
         {
             $result = $whois->whoislookup($data[$c]);
 
-            $export_data = $filter_text->get_filtered_data($result);
+            if(strpos($result, 'Error: No appropriate') !== false)
+            {
+                $export_data = array(
+                    'Domain Name' => trim($data[$c]),
+                    'Whois Server' => '',
+                    'Registrar URL' => '',
+                    'Update Date' => '',
+                    'Update Time' => '',
+                    'Creation Date' => '',
+                    'Creation Time' => '',
+                    'Expiry Date' => '',
+                    'Expiry Time' => '',
+                    'Error' => trim($result)
+                );
+            }
+            else
+            {
+                $export_data = $filter_text->get_filtered_data($result);
+            }
            
             $all_data[] = $export_data; //Array with all the extracted data.
         }
@@ -55,7 +73,7 @@ if (($handle = fopen("upload/domains.csv", "r")) !== false)
             <h2 align="center">Records Succsessfully Factched</h2>
             <table class="records-table">
                 <?php
-                echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th></tr>';
+                echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th><th>Error</th></tr>';
                 foreach ($all_data as $data) 
                 {
                     echo '<tr>';
