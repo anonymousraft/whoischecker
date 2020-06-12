@@ -26,9 +26,16 @@ require_once 'whoisServer.php';
 require_once "filterText.php";
 
 $whois = new Whois();
+
 $filter_text = new filterText();
 
 $whois_data = $whois->whoislookup($input);
+
+if(strpos($whois_data, 'Error: No appropriate') !== false)
+{
+    echo $whois_data . '<a href="index.php">'.' <<< Home'.'</a>';
+    die();
+}
 
 $domain_data = $filter_text->get_filtered_data($whois_data);
 

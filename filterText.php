@@ -35,7 +35,8 @@ class filterText
                 'Creation Date' => trim($created_date),
                 'Creation Time' => trim($created_time),
                 'Expiry Date' => trim($expiry_date),
-                'Expiry Time' => trim($expiry_time)
+                'Expiry Time' => trim($expiry_time),
+                'Error' => ''
             );
 
             return $export_data;

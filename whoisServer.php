@@ -184,7 +184,7 @@ public function whoislookup($domain)
             $tld = strtolower(array_pop($domain_parts));
             $server = $this->WHOIS_SERVERS[$tld][0];
             
-            if (!$server) 
+            if (!$server)
             {
                 return "Error: No appropriate Whois server found for $domain domain!";
             }
