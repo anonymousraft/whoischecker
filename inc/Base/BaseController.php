@@ -32,7 +32,6 @@ class BaseController
     public function registerHeaderScripts()
     {
         require_once "$this->app_root/assets/layouts/header.php";
-        require_once "$this->app_root/assets/layouts/titles.php";
     }
 
     public function bodyHTML()
