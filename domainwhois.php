@@ -14,8 +14,6 @@ $domain_whois = new $domain_whois_class();
 
 $domain_whois->template();
 
-$get_domain = $_POST['domain_name'];
-
 $domain_data = $domain_whois->domainWhoisCheck($domain_whois->domainSanitization($_POST['domain_name']));
 
 ?>

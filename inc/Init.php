@@ -15,7 +15,6 @@ class Init{
     {
         return [
             Pages\HomePage::class,
-            //Base\EnqueueScripts::class
         ];
     }
 
