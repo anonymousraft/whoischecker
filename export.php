@@ -1,51 +1,26 @@
 <?php
-//Exporting data to excel sheet
+/*
+* @package Whoischecker
+*/
+
 session_start();
 
-if(!isset($_SESSION["domain_data"]))
+if (file_exists(dirname(__FILE__) . '/vendor/autoload.php'))
 {
-    echo 'No data found in the records, Please upload file from <a href="index.php">here</a>.';
-    die();
+    require_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
-$fileName = "domain_data" . rand(1,100) . ".xls";
-
-
-function filterData($str) 
+if (class_exists('Inc\\Pages\\ExportData'))
 {
-    $str = preg_replace("/\t/", "\\t", $str);
-    $str = preg_replace("/\r?\n/", "\\n", $str);
-    if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+    $export_data_class = Inc\Pages\ExportData::class;
 }
 
+$export_data = new $export_data_class();
 
-header("Content-Disposition: attachment; filename=\"$fileName\"");
-header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Cache-Control: max-age=0");
+$export_data->checkSession();
 
+$export_data->exportData();
 
-$flag = false;
+$export_data->filesCleanUp();
 
-foreach($_SESSION["domain_data"] as $row) 
-{
-    if(!$flag) 
-    {
-            // display column names as first row
-        echo implode("\t", array_keys($row)) . "\n";
-        $flag = true;
-    }
-        // filter data
-    array_walk($row, 'filterData');
-    echo implode("\t", array_values($row)) . "\n";
-}
-
-//deleting uplaoded file
-$uploaded_file = "upload/domains.csv";
-unlink($uploaded_file);
-rmdir('upload');
-
-$_SESSION = array();
-session_destroy();
-exit;
-
-?>
+$export_data->sessionDestroy();

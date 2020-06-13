@@ -20,8 +20,8 @@ class BulkWhoisCheck extends BaseController
     {
         $this->whois = new WhoisServer();
         $this->filter_text = new FilterText();
-
         $this->registerHeaderScripts();
+        echo '<title>'.$this->page_titles['results'].'</title>';
         $this->bodyHTML();
         
     }

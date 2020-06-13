@@ -1,4 +1,7 @@
 <?php
+/*
+* @package Whoischecker
+*/
 
 if (file_exists(dirname(__FILE__) . '/vendor/autoload.php'))
 {

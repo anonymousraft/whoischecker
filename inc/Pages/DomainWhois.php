@@ -22,6 +22,7 @@ class DomainWhois extends BaseController
         $this->filter_text = new FilterText();
 
         $this->registerHeaderScripts();
+        echo '<title>'.$this->page_titles['results'].'</title>';
         $this->bodyHTML();
     }
 
