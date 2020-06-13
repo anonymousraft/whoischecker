@@ -14,6 +14,7 @@ class DomainWhois extends BaseController
 {
     public $whois;
     public $filter_text;
+    public $domain_data;
 
     public function template()
     {
@@ -50,9 +51,7 @@ class DomainWhois extends BaseController
             die();
         }
 
-        $domain_data = $this->filter_text->get_filtered_data($whois_data);
-
-        return $domain_data;
+        $this->domain_data = $this->filter_text->get_filtered_data($whois_data);
     }
 
     public function is_url($uri)
@@ -65,11 +64,17 @@ class DomainWhois extends BaseController
         }
     }
 
-    public function viewData($domain_data)
+    public function getView()
+    {
+        require_once "$this->app_root/views/singledomain.php";
+    }
+
+
+    public function viewData()
     {
         echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th><th>Error</th></tr>';
         echo '<tr>';
-                    foreach($domain_data as $value)
+                    foreach($this->domain_data as $value)
                     {
                         echo '<td>'. $value .'</td>';
                     }
