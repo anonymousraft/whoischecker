@@ -10,13 +10,7 @@ if (class_exists('Inc\\Pages\\DomainWhois'))
     $domain_whois_class = Inc\Pages\DomainWhois::class;
  }
 
-$domain_whois = new $domain_whois_class();
-
-$domain_whois->template();
-
-$get_domain = $_POST['domain_name'];
-
-$domain_data = $domain_whois->domainWhoisCheck($domain_whois->domainSanitization($_POST['domain_name']));
+ $domain_whois = new $domain_whois_class();
 
 ?>
 <div class="container-fluid div-def-padding">
@@ -25,7 +19,7 @@ $domain_data = $domain_whois->domainWhoisCheck($domain_whois->domainSanitization
             <h2 align="center">Record Succsessfully Factched</h2>
             <table class="records-table">
                 <?php
-                $domain_whois->viewData($domain_data);
+                $domain_whois->viewData();
                 ?>
             </table>
             <hr/>
@@ -39,7 +33,3 @@ $domain_data = $domain_whois->domainWhoisCheck($domain_whois->domainSanitization
  </div>
 </div>
 </div>
-<?php
-$domain_whois->registerFooterScripts();
-?>
-

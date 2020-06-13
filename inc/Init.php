@@ -38,7 +38,4 @@ class Init{
 		return $service;
 	}
 
-    public static function indexPage(){
-        echo "Autoload Working";
-    }
 }
