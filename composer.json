@@ -1,0 +1,16 @@
+{
+    "name": "hitendra/whoischecker",
+    "description": "Bulk whois checker",
+    "license": "GPLv3",
+    "authors": [{
+        "name": "Hitendra Rathore",
+        "email": "hitendra1995@gmail.com"
+    }],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Inc\\": "./inc"
+        }
+    }
+
+}

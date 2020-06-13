@@ -1,8 +1,3 @@
-<?php 
-
-require_once "assets/layouts/titles.php";
-
-?>
 <!doctype html>
 <html lang="en">
   <head>
