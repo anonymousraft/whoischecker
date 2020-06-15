@@ -32,7 +32,7 @@ class ExportData extends BaseController
 
     public function exportData()
     {
-        $fileName = "whois_data" . rand(1, 100) . ".xls";
+        $fileName = "whois_data-". date("Y-m-d-his").  ".xls";
 
         header("Content-Disposition: attachment; filename=\"$fileName\"");
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
