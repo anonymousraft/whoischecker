@@ -11,5 +11,8 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php'))
 
 if (class_exists('Inc\\Init'))
 {
-    Inc\Init::register('home');
+    $settings = [
+        'page_name' => 'home'
+    ];
+    Inc\Init::register($settings);
 }

@@ -15,9 +15,12 @@ class BulkWhoisCheck extends BaseController
     public $whois;
     public $filter_text;
     public $all_data = [];
+    public $sleep_time;
 
-    public function initiate()
+    public function initiate($get_sleep_time = 250000)
     {
+        $this->sleep_time = $get_sleep_time;
+
         $this->template();
 
         $this->checkSessionVar();
@@ -55,6 +58,9 @@ class BulkWhoisCheck extends BaseController
                 $row++;
 
                 for ($c = 0; $c < $num; $c++) {
+
+                    usleep($this->sleep_time);
+
                     $result = $this->whois->whoislookup($data[$c]);
 
                     if (strpos($result, 'Error: No appropriate') !== false) {

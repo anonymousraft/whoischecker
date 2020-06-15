@@ -5,14 +5,15 @@
 
 namespace Inc;
 
-class Init{
+class Init
+{
 
 	public static $page_classes = [];
 
-    public static function get_services()
-    {
+	public static function get_services()
+	{
 
-    	self::$page_classes = [
+		self::$page_classes = [
 
 			'home' => Pages\HomePage::class,
 			'bulkwhois' => Pages\BulkWhoisCheck::class,
@@ -20,21 +21,34 @@ class Init{
 			'upload' => Base\UploadFile::class,
 			'export' => Pages\ExportData::class
 		];
-		
 	}
-	
-	public static function register(string $page_name)
-	{
-		self::get_services();
-		$class = self::$page_classes[$page_name];
-		$class_obj = new $class();
-		
-		if($page_name === 'domainwhois')
-		{
-			$class_obj->initiate($_POST['domain_name']);
-			exit;
-		}
 
-		$class_obj->initiate();
+	public static function register($settings)
+	{
+		if (isset($settings['page_name'])) {
+
+			self::get_services();
+			$class = self::$page_classes[$settings['page_name']];
+			$class_obj = new $class();
+
+			if ($settings['page_name'] === 'domainwhois') 
+			{
+				$class_obj->initiate($_POST['domain_name']);
+				exit;
+			}
+
+			if ($settings['page_name'] === 'bulkwhois' && !empty($settings['sleep_time'])) 
+			{
+				$class_obj->initiate($settings['sleep_time']);
+				exit;
+			}
+			elseif($settings['page_name'] === 'bulkwhois')
+			{
+				$class_obj->initiate();
+				exit;
+			}
+
+			$class_obj->initiate();
+		}
 	}
 }

@@ -11,6 +11,17 @@ Fixed the issue with .IN TLD. Now it also works with .IN TLDs.
 4. Make sure you are connected to the Internet.
 5. Larger list of domains, Increase your PHP execution time to the max.
 
+### In Case of Socket Error
+If you have large domain list, you might come across the socket error. Socket error is simply due to the firewall rules implemented on the Whois Server.
+
+In case of socket error, Please increase the value of `sleep_time` parameter in the file `checkwhois.php`
+
+change the line `//'sleep_time' => 500000` to `'sleep_time' => 500000`
+
+The default value is 250000 microseconds i.e. 0.25 Seconds. But you can increase as per your requirement.
+
+`1 sec is equal to 1000000 micro seconds`
+
 ## Pull requests are welcome
 if you find any issue, or if you any feature idea please create issue. Or if you feel that you can contribute to the project. I welcome pull requests. Make sure you describe the changes in detail.
 
