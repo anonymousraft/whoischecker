@@ -16,13 +16,24 @@ class DomainWhois extends BaseController
     public $filter_text;
     public $domain_data;
 
+    public function initiate(string $domain_name)
+    {
+        $this->template();
+
+        $this->domainWhoisCheck($this->domainSanitization($domain_name));
+
+        $this->getView();
+
+        $this->registerFooterScripts();
+    }
+
     public function template()
     {
         $this->whois = new WhoisServer();
         $this->filter_text = new FilterText();
 
         $this->registerHeaderScripts();
-        echo '<title>'.$this->page_titles['results'].'</title>';
+        echo '<title>' . $this->page_titles['results'] . '</title>';
         $this->bodyHTML();
     }
 
@@ -75,10 +86,9 @@ class DomainWhois extends BaseController
     {
         echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th><th>Error</th></tr>';
         echo '<tr>';
-                    foreach($this->domain_data as $value)
-                    {
-                        echo '<td>'. $value .'</td>';
-                    }
+        foreach ($this->domain_data as $value) {
+            echo '<td>' . $value . '</td>';
+        }
         echo '</tr>';
     }
 }

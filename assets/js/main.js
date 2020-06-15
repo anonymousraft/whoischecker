@@ -42,8 +42,10 @@
       processData: false,
       data: form_data,
       type: 'post',
-      success: function(php_script_response){
-              $('#view').html(php_script_response); // display response from the PHP script, if any
-            }
+      success: function(php_script_response)
+      {
+              $('#view').append(php_script_response);
+              $("#view").focus();
+      }
           });
   });

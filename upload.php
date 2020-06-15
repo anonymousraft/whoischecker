@@ -10,11 +10,7 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php'))
     require_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
-if (class_exists('Inc\\Base\\UploadFile'))
+if (class_exists('Inc\\Init'))
 {
-    $upload_file_class = Inc\Base\UploadFile::class;
+    Inc\Init::register('upload');
 }
-
-$upload_file = new $upload_file_class();
-
-$upload_file->uploadFile();

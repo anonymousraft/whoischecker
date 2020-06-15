@@ -12,7 +12,7 @@ class UploadFile extends BaseController
 {
     public $mimes;
 
-    public function uploadFile()
+    public function initiate()
     {
         $this->mimes = array('application/vnd.ms-excel', 'text/csv', 'text/tsv');
 

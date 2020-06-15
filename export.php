@@ -10,17 +10,7 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php'))
     require_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
-if (class_exists('Inc\\Pages\\ExportData'))
+if (class_exists('Inc\\Init'))
 {
-    $export_data_class = Inc\Pages\ExportData::class;
+    Inc\Init::register('export');
 }
-
-$export_data = new $export_data_class();
-
-$export_data->checkSession();
-
-$export_data->exportData();
-
-$export_data->filesCleanUp();
-
-$export_data->sessionDestroy();

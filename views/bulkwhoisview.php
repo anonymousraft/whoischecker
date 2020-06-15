@@ -1,6 +1,6 @@
 <div class="container-fluid div-def-padding">
     <div class="row h-100">
-        <div class="col-md-12 col-lg-12">
+        <div class="col-md-12 col-lg-12" style="display: grid;">
             <h2 align="center">Records Succsessfully Factched</h2>
             <table class="records-table">
                 <?php

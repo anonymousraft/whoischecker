@@ -16,14 +16,26 @@ class BulkWhoisCheck extends BaseController
     public $filter_text;
     public $all_data = [];
 
+    public function initiate()
+    {
+        $this->template();
+
+        $this->checkSessionVar();
+
+        $this->bulkWhoisCheck();
+
+        $this->getView();
+
+        $this->registerFooterScripts();
+    }
+
     public function template()
     {
         $this->whois = new WhoisServer();
         $this->filter_text = new FilterText();
         $this->registerHeaderScripts();
-        echo '<title>'.$this->page_titles['results'].'</title>';
+        echo '<title>' . $this->page_titles['results'] . '</title>';
         $this->bodyHTML();
-        
     }
 
     public function checkSessionVar()
@@ -68,10 +80,7 @@ class BulkWhoisCheck extends BaseController
 
             $_SESSION["domain_data"] = $this->all_data;
 
-            return $this->all_data;
-            
             fclose($handle);
-
         }
     }
 
@@ -83,12 +92,10 @@ class BulkWhoisCheck extends BaseController
     public function viewData()
     {
         echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th><th>Error</th></tr>';
-        foreach ($this->all_data as $data) 
-        {
+        foreach ($this->all_data as $data) {
             echo '<tr>';
-            foreach($data as $col_head => $value)
-            {
-                echo '<td>'. $value .'</td>';
+            foreach ($data as $col_head => $value) {
+                echo '<td>' . $value . '</td>';
             }
             echo '</tr>';
         }

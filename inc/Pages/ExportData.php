@@ -10,6 +10,18 @@ use \Inc\Base\BaseController;
 
 class ExportData extends BaseController
 {
+
+    public function initiate()
+    {
+        $this->checkSession();
+
+        $this->exportData();
+
+        $this->filesCleanUp();
+
+        $this->sessionDestroy();
+    }
+
     public function checkSession()
     {
         if (!isset($_SESSION["domain_data"])) {
