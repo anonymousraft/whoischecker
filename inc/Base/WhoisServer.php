@@ -149,7 +149,8 @@ class WhoisServer
         "ve"                =>  array("whois.nic.ve"),
         "vg"                =>  array("whois.adamsnames.tc"),
         "io"                =>  array("whois.nic.io"),
-        "yu"                =>  array("whois.ripe.net")
+        "yu"                =>  array("whois.ripe.net"),
+        "co.uk"             => array("whois.nic.uk")
     );
 
     public function whoislookup($domain)
@@ -173,13 +174,23 @@ class WhoisServer
 
         //remove subdomain
         $domain = $this->giveHost($domain);
-  
 
         if (preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/", $domain)) {
             return $this->queryWhois("whois.lacnic.net", $domain);
         } elseif (preg_match("/^([-a-z0-9]{2,100}).([a-z.]{2,8})$/i", $domain)) {
+           
             $domain_parts = explode(".", $domain);
-            $tld = strtolower(array_pop($domain_parts));
+
+            if(count($domain_parts)>2)
+            {                
+                $cctld[] = strtolower(array_pop($domain_parts));
+                $cctld[] = strtolower(array_pop($domain_parts));                
+                $tld = $cctld[count($cctld)-1].'.'.$cctld[count($cctld)-2];
+            }
+            else{
+                $tld = strtolower(array_pop($domain_parts));
+            }
+
             $server = $this->WHOIS_SERVERS[$tld][0];
 
             if (!$server) {
@@ -203,7 +214,7 @@ class WhoisServer
     {
         $fp = @fsockopen($server, 43, $errno, $errstr, 20) or die("Socket Error " . $errno . " - " . $errstr);
 
-        if ($server == "whois.verisign-grs.com") {
+            if ($server == "whois.verisign-grs.com") {
             $domain = "=" . $domain;
         }
 
@@ -214,12 +225,26 @@ class WhoisServer
             $out .= fgets($fp);
         }
         fclose($fp);
+
+        echo $out;
+        exit;
+
         return $out;
     }
 
-    public function giveHost($host_with_subdomain) {
+    public function giveHost($host_with_subdomain)
+    {
+        $cctld = '.co.uk';
+        
         $array = explode(".", $host_with_subdomain);
-    
+
+        $tld = '.'.$array[count($array) - 2].'.'.$array[count($array) - 1 ];
+
+        if ($cctld == $tld)
+        {
+            return $array[count($array) - 3].'.'.$array[count($array) - 2].'.'.$array[count($array) - 1 ];
+        }
+ 
         return (array_key_exists(count($array) - 2, $array) ? $array[count($array) - 2] : "").".".$array[count($array) - 1];
     }
 }
