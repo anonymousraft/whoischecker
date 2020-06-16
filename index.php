@@ -14,5 +14,6 @@ if (class_exists('Inc\\Init'))
     $settings = [
         'page_name' => 'home'
     ];
+    
     Inc\Init::register($settings);
 }
