@@ -33,8 +33,14 @@ class Init
 
 			if ($settings['page_name'] === 'domainwhois') 
 			{
-				$class_obj->initiate($_POST['domain_name']);
-				exit;
+				if(isset($_POST['domain_name']))
+				{
+					$class_obj->initiate($_POST['domain_name']);
+					exit;
+				}
+
+				echo 'Please Enter a Valid Domain Name: eg. quatervois.io or https://quatervois.io.<a href="index.php"> <<< Home</a>';
+            	exit;
 			}
 
 			if ($settings['page_name'] === 'bulkwhois' && !empty($settings['sleep_time'])) 

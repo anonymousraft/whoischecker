@@ -226,9 +226,6 @@ class WhoisServer
         }
         fclose($fp);
 
-        echo $out;
-        exit;
-
         return $out;
     }
 
