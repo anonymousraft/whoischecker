@@ -56,7 +56,9 @@ class DomainWhois extends BaseController
 
     public function domainWhoisCheck($domain)
     {
-        $whois_data = $this->whois->whoislookup($domain);
+        $filtered_domain = $this->filterDomain($domain);
+
+        $whois_data = $this->whois->whoislookup($filtered_domain);
 
         if (strpos($whois_data, 'Error: No appropriate') !== false) {
             echo $whois_data . '<a href="index.php">' . ' <<< Home' . '</a>';
@@ -83,9 +85,16 @@ class DomainWhois extends BaseController
 
 
     public function viewData()
-    {
-        echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th><th>Error</th></tr>';
+    {  
         echo '<tr>';
+
+        foreach ($this->domain_data as $key => $value) {
+            echo '<th>' . $key . '</th>';
+        }
+        echo '</tr>';
+                
+        echo '<tr>';
+
         foreach ($this->domain_data as $value) {
             echo '<td>' . $value . '</td>';
         }

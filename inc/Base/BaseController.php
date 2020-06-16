@@ -51,4 +51,49 @@ class BaseController
             'results' => 'Results...'
         ];
     }
+
+    public function filterDomain(string $domain_name)
+    {
+        $domain = trim($domain_name); //remove space from start and end of domain
+
+        //remove traling slash
+        if (substr($domain, -1) == '/') {
+            $domain = substr($domain, 0, -1);
+        }
+
+        // remove http:// if included
+        if (substr(strtolower($domain), 0, 7) == "http://") {
+            $domain = substr($domain, 7);
+        }
+
+        // remove https:// if included
+        if (substr(strtolower($domain), 0, 8) == "https://") {
+            $domain = substr($domain, 8);
+        }
+
+        //remove subdomain
+        $domain = $this->giveHost($domain);
+
+        return $domain;
+    }
+
+    public function giveHost($host_with_subdomain)
+    {
+        $cctld = '.co.uk';
+
+        $array = explode(".", $host_with_subdomain);
+
+        $tld = '.' . $array[count($array) - 2] . '.' . $array[count($array) - 1];
+
+        if ($cctld == $tld) {
+            return $array[count($array) - 3] . '.' . $array[count($array) - 2] . '.' . $array[count($array) - 1];
+        }
+
+        return (array_key_exists(count($array) - 2, $array) ? $array[count($array) - 2] : "") . "." . $array[count($array) - 1];
+    }
+
+    public function debug($string)
+    {
+        return '<pre>'. var_dump($string).'</pre>';
+    }
 }

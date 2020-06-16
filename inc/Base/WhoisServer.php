@@ -5,7 +5,6 @@
 */
 
 namespace Inc\Base;
-
 class WhoisServer
 {
     private $WHOIS_SERVERS = array(
@@ -155,26 +154,6 @@ class WhoisServer
 
     public function whoislookup($domain)
     {
-        $domain = trim($domain); //remove space from start and end of domain
-
-        //remove traling slash
-        if (substr($domain, -1) == '/') {
-            $domain = substr($domain, 0, -1);
-        }
-
-        // remove http:// if included
-        if (substr(strtolower($domain), 0, 7) == "http://") {
-            $domain = substr($domain, 7);
-        }
-
-        // remove https:// if included
-        if (substr(strtolower($domain), 0, 8) == "https://") {
-            $domain = substr($domain, 8);
-        }
-
-        //remove subdomain
-        $domain = $this->giveHost($domain);
-
         if (preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/", $domain)) {
             return $this->queryWhois("whois.lacnic.net", $domain);
         } elseif (preg_match("/^([-a-z0-9]{2,100}).([a-z.]{2,8})$/i", $domain)) {
@@ -227,21 +206,5 @@ class WhoisServer
         fclose($fp);
 
         return $out;
-    }
-
-    public function giveHost($host_with_subdomain)
-    {
-        $cctld = '.co.uk';
-        
-        $array = explode(".", $host_with_subdomain);
-
-        $tld = '.'.$array[count($array) - 2].'.'.$array[count($array) - 1 ];
-
-        if ($cctld == $tld)
-        {
-            return $array[count($array) - 3].'.'.$array[count($array) - 2].'.'.$array[count($array) - 1 ];
-        }
- 
-        return (array_key_exists(count($array) - 2, $array) ? $array[count($array) - 2] : "").".".$array[count($array) - 1];
     }
 }

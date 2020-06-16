@@ -51,19 +51,29 @@ class BulkWhoisCheck extends BaseController
 
     public function bulkWhoisCheck()
     {
-        $row = 1;
-        if (($handle = fopen("$this->app_root/upload/domains.csv", "r")) !== false) {
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $num = count($data);
-                $row++;
 
-                for ($c = 0; $c < $num; $c++) {
+        if (($handle = fopen("$this->app_root/upload/domains.csv", "r")) !== false) 
+        {
+            while (($data = fgetcsv($handle, 1000, ",")) !== false) 
+            {
+                $all_domain_names[] = $this->filterDomain($data[0]);                
+            }
+
+            $unique_domains = array_unique($all_domain_names,SORT_STRING);
+
+            $unique_domains_reset = array_values($unique_domains);
+
+            $num = count($unique_domains_reset);
+
+                for ($c = 0; $c < $num; $c++) 
+                {
 
                     usleep($this->sleep_time);
 
-                    $result = $this->whois->whoislookup($data[$c]);
+                    $result = $this->whois->whoislookup($unique_domains_reset[$c]);
 
-                    if (strpos($result, 'Error: No appropriate') !== false) {
+                    if (strpos($result, 'Error: No appropriate') !== false) 
+                    {
                         $export_data = array(
                             'Domain Name' => trim($data[$c]),
                             'Whois Server' => '',
@@ -76,13 +86,14 @@ class BulkWhoisCheck extends BaseController
                             'Expiry Time' => '',
                             'Error' => trim($result)
                         );
-                    } else {
+                    }
+                    else 
+                    {
                         $export_data = $this->filter_text->get_filtered_data($result);
                     }
 
-                    $this->all_data[] = $export_data; //Array with all the extracted data.
+                    $this->all_data[] = $export_data;
                 }
-            }
 
             $_SESSION["domain_data"] = $this->all_data;
 
@@ -98,6 +109,7 @@ class BulkWhoisCheck extends BaseController
     public function viewData()
     {
         echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th><th>Error</th></tr>';
+
         foreach ($this->all_data as $data) {
             echo '<tr>';
             foreach ($data as $col_head => $value) {
