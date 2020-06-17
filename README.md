@@ -4,6 +4,11 @@ PHP based bulk WHOIS checker. It supports all the popular TLDs and ccTLDs. Uploa
 
 Fixed the issue with .IN TLD. Now it also works with .IN TLDs.
 
+## Check DNS Records
+The tool is now able to check the DNS records for domains. You can easily check the A, AAAA, MX, NS, TXT or SOA record for any domain. 
+
+While pointing to new server, it is essential that you carefully look the DNS propogation time. This feature will help you to determine the NS records stored on your ISPs DNS for the domain name you are checking. 
+
 ## Required Resources
 1. Composer Installed. See [this](https://www.hostinger.in/tutorials/how-to-install-composer) guide to install composer
 2. Open your command propmt or terminal, Navigate to the bulk whois checker folder and run command `composer install`

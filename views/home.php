@@ -14,7 +14,7 @@
   <div class="row h-100">
     <div class="col-md-12 col-lg-12">
       <div class="card card-block w-25">
-        <p>Try New <a href="dns.php" target="_blank">New DNS Checker</a></p>
+        <p class="new-feature">Try New <a href="dns.php" target="_blank">New DNS Checker</a></p>
       </div>
     </div>
   </div>

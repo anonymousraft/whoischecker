@@ -82,6 +82,7 @@ class BaseController
             'NS' => 'target',
             'PTR' => '',
             'SOA' => [
+                'type',
                 'mname',
                 'rname'
             ],

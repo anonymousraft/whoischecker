@@ -202,3 +202,10 @@ input[type=submit] {
 input[type=submit]:hover {
   background-color: #67c0f7;
 }
+
+.new-feature{
+  padding: 1.5rem;
+  border: solid 2px #03a9f4;
+  border-radius: 5px;
+  display: inline-block;
+}

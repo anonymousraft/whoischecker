@@ -49,24 +49,46 @@ class DnsChecker extends BaseController
         $this->dns_records = dns_get_record($domain_name, $int_type);
 
         //$this->debug($this->dns_records);
-        if(empty($this->dns_records))
-        {
-            echo '<p style="color: #087fb5;font-weight: 500;"><strong>'.$dns_record_type. '</strong>'. ' record not found for ' . $domain_name. '</p>';
-            exit; 
+
+        if (empty($this->dns_records)) {
+            echo '<p style="color: #087fb5;font-weight: 500;"><strong>' . $dns_record_type . '</strong>' . ' record not found for ' . $domain_name . '</p>';
+            exit;
         }
 
         $this->getView($this->dns_record_view[$dns_record_type]);
-
     }
 
     public function getView($key_value)
-    {        
+    {
+
+        if (is_array($key_value)) {
+            $this->getSoaRecord($key_value);
+        }
+
+        foreach ($this->dns_records as $dns_record) {
+            foreach ($dns_record as $key => $value) {
+                if ($key == $key_value) {
+                    echo '<p style="color: #087fb5;font-weight: 500;">' . $value . '</p>';
+                }
+            }
+        }
+    }
+
+    public function getSoaRecord(array $keys)
+    {
+        $record_type = $this->dns_records[0][$keys[0]];
+
+        if ($record_type === 'SOA') {
             foreach ($this->dns_records as $dns_record) {
                 foreach ($dns_record as $key => $value) {
-                    if ($key == $key_value) {
-                        echo '<p style="color: #087fb5;font-weight: 500;">'.$value . '</p>';
+                    if ($key === $keys[1]) {
+                        echo '<p style="color: #087fb5;font-weight: 500;">' . $value . '</p>';
+                    } elseif ($key === $keys[2]) {
+                        echo '<p style="color: #087fb5;font-weight: 500;">' . $value . '</p>';
                     }
                 }
             }
+        }
+
     }
 }
