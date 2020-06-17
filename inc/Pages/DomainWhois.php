@@ -44,7 +44,7 @@ class DomainWhois extends BaseController
             die();
         }
 
-        $input = $this->is_url($domain_name);
+        $input = $this->filter_text->is_url($domain_name);
 
         if (!$input) {
             echo 'Please Enter a Valid Domain Name: eg. quatervois.io or https://quatervois.io. <a href="index.php"> <<< Home</a>';
@@ -66,16 +66,6 @@ class DomainWhois extends BaseController
         }
 
         $this->domain_data = $this->filter_text->get_filtered_data($whois_data);
-    }
-
-    public function is_url($uri)
-    {
-        $domain_validation = '/((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z0-9\&\.\/\?\:@\-_=#])*/';
-        if (preg_match($domain_validation, $uri)) {
-            return $uri;
-        } else {
-            return false;
-        }
     }
 
     public function getView()

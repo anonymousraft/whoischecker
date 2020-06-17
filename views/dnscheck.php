@@ -54,18 +54,42 @@
     <div class="row h-100">
         <div class="col-md-12 col-lg-12 custom-border-12">
             <div class="card card-block w-25 custom-border-box">
-                <form method="post" action="domainwhois.php">
+                <form id="dns_form" method="post" action="dns.php">
                     <input type="text" name="domain_name" placeholder="Enter Domain Name or URL">
                     <select name="dns_record_type" id="dns_record">
                         <?php
-                        foreach($this->dns_record_types as $types)
-                        {
-                            echo '<option value="'.$types.'">'.$types.'</option>';
-                        }                      
+                        foreach ($this->dns_record_types as $types => $int_types) {
+                            echo '<option value="' . $types . '">' . $types . '</option>';
+                        }
                         ?>
                     </select>
-                    <input type="submit" name="submit" value="Check Whois">
+                    <input type="submit" id="submit" name="submit" value="Check Whois">
                 </form>
             </div>
         </div>
     </div>
+    <div class="container-fluid div-def-padding div-center" style="margin-top: 25px;padding-top:10px !important">
+        <div class="row h-100">
+            <div class="col-md-12 col-lg-12">
+                <div id="view" class="card card-block w-25">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#dns_form").submit(function(event) {
+            event.preventDefault(); //prevent default action 
+            var post_url = $(this).attr("action"); //get form action url
+            var request_method = $(this).attr("method"); //get form GET/POST method
+            var form_data = $(this).serializeArray(); //Encode form elements for submission
+
+            console.log(form_data);
+            $.ajax({
+                url: post_url,
+                type: request_method,
+                data: form_data
+            }).done(function(response) { //
+                $("#view").html(response);
+            });
+        });
+    </script>

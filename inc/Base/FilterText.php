@@ -82,6 +82,8 @@ class FilterText
 
     public function filterDomain(string $domain_name)
     {
+     
+        
         $domain = trim($domain_name); //remove space from start and end of domain
 
         //remove traling slash
@@ -118,6 +120,16 @@ class FilterText
         }
 
         return (array_key_exists(count($array) - 2, $array) ? $array[count($array) - 2] : "") . "." . $array[count($array) - 1];
+    }
+
+    public function is_url($uri)
+    {
+        $domain_validation = '/((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z0-9\&\.\/\?\:@\-_=#])*/';
+        if (preg_match($domain_validation, $uri)) {
+            return $uri;
+        } else {
+            return false;
+        }
     }
 
 }

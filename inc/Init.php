@@ -44,6 +44,19 @@ class Init
             	exit;
 			}
 
+			if ($settings['page_name'] === 'dnscheck') 
+			{
+						
+				if (isset($_POST['domain_name']) && isset($_POST['dns_record_type'])) 
+				{
+						
+					$class_obj->getFormData($_POST['domain_name'], $_POST['dns_record_type']);
+					exit;
+				}
+				$class_obj->initiate();
+
+			}
+
 			if ($settings['page_name'] === 'bulkwhois' && !empty($settings['sleep_time'])) 
 			{
 				$class_obj->initiate($settings['sleep_time']);

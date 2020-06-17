@@ -58,19 +58,19 @@ class BaseController
     public function dnsRecordTypes()
     {
         $this->dns_record_types = [
-            'A',
-            'CNAME',
-            'HINFO',
-            'CAA',
-            'MX',
-            'NS',
-            'PTR',
-            'SOA',
-            'TXT',
-            'AAAA',
-            'SRV',
-            'NAPTR',
-            'A6'
+            'A' => DNS_A,
+            'CNAME' => DNS_CNAME,
+            'HINFO' => DNS_HINFO,
+            'CAA' => DNS_CAA,
+            'MX' => DNS_MX,
+            'NS' => DNS_NS,
+            'PTR' => DNS_PTR,
+            'SOA' => DNS_SOA,
+            'TXT' => DNS_TXT,
+            'AAAA' => DNS_AAAA,
+            'SRV' => DNS_SRV,
+            'NAPTR' => DNS_NAPTR,
+            'A6' => DNS_A6
         ];
     }
 
