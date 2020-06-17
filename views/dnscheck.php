@@ -49,15 +49,6 @@
         background-color: #67c0f7;
     }
 </style>
-<div class="container-fluid div-def-padding div-center" style="margin-top: 25px;padding-top:10px !important">
-    <div class="row h-100">
-        <div class="col-md-12 col-lg-12">
-            <div class="card card-block w-25">
-                <p class="new-feature"><a href="index.php">Go back to Bulk Whois Checker</a></p>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="container-fluid div-def-padding">
     <div class="row h-100">
         <div class="col-md-12 col-lg-12 custom-border-12">
@@ -78,10 +69,20 @@
         </div>
     </div>
 </div>
-<div class="container-fluid div-def-padding div-center" style="margin-top: 25px;padding-top:10px !important">
+<div class="container-fluid div-def-padding div-center" style="padding-top:10px !important">
     <div class="row h-100">
         <div class="col-md-12 col-lg-12">
+            <img id="loading-image" src="assets/img/loader.gif" style="display:none;" width="65" height="65" />
             <div id="view" class="card card-block w-25">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid div-def-padding div-center" style="padding-top:10px !important;padding-bottom: 0px;">
+    <div class="row h-100">
+        <div class="col-md-12 col-lg-12">
+            <div class="card card-block w-25">
+                <p class="new-feature"><a href="index.php">Go back to Bulk Whois Checker</a></p>
             </div>
         </div>
     </div>
@@ -96,9 +97,16 @@
         $.ajax({
             url: post_url,
             type: request_method,
-            data: form_data
+            data: form_data,
+            beforeSend: function() {
+                $("#loading-image").show();
+                $("#view").hide();
+            },
         }).done(function(response) { //
+            $("#view").show();
             $("#view").html(response);
+            $("#loading-image").hide();
+            $("#view").focus();
         });
     });
 </script>
