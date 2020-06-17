@@ -19,7 +19,8 @@ class Init
 			'bulkwhois' => Pages\BulkWhoisCheck::class,
 			'domainwhois' => Pages\DomainWhois::class,
 			'upload' => Base\UploadFile::class,
-			'export' => Pages\ExportData::class
+			'export' => Pages\ExportData::class,
+			'dnscheck' => Pages\DnsChecker::class
 		];
 	}
 

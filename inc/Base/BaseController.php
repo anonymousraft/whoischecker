@@ -12,6 +12,7 @@ class BaseController
     public $app_name;
     public $app_url;
     public $page_titles = [];
+    public $dns_record_types = [];
 
     public function __construct()
     {
@@ -19,6 +20,7 @@ class BaseController
         $this->app_root = $_SERVER['DOCUMENT_ROOT'] ;
         $this->app_url = $this->appURL();
         $this->pageTitles();
+        $this->dnsRecordTypes();
     }
 
     private function appURL()
@@ -48,7 +50,27 @@ class BaseController
     {
         $this->page_titles = [
             'home' => 'Bulk Whois Checker 2.0 by Hitendra',
-            'results' => 'Results...'
+            'results' => 'Results...',
+            'dnscheck' => 'Check DNS Records'
+        ];
+    }
+
+    public function dnsRecordTypes()
+    {
+        $this->dns_record_types = [
+            'A',
+            'CNAME',
+            'HINFO',
+            'CAA',
+            'MX',
+            'NS',
+            'PTR',
+            'SOA',
+            'TXT',
+            'AAAA',
+            'SRV',
+            'NAPTR',
+            'A6'
         ];
     }
 
