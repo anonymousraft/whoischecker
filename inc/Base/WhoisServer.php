@@ -154,9 +154,12 @@ class WhoisServer
 
     public function whoislookup($domain)
     {
-        if (preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/", $domain)) {
+        if (preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/", $domain)) 
+        {
             return $this->queryWhois("whois.lacnic.net", $domain);
-        } elseif (preg_match("/^([-a-z0-9]{2,100}).([a-z.]{2,8})$/i", $domain)) {
+        } 
+        elseif (preg_match("/^([-a-z0-9]{2,100}).([a-z.]{2,8})$/i", $domain)) 
+        {
            
             $domain_parts = explode(".", $domain);
 

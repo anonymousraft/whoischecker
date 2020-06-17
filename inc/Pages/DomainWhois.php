@@ -6,9 +6,9 @@
 
 namespace Inc\Pages;
 
-use \Inc\Base\BaseController;
 use \Inc\Base\FilterText;
 use \Inc\Base\WhoisServer;
+use \Inc\Base\BaseController;
 
 class DomainWhois extends BaseController
 {
@@ -56,7 +56,7 @@ class DomainWhois extends BaseController
 
     public function domainWhoisCheck($domain)
     {
-        $filtered_domain = $this->filterDomain($domain);
+        $filtered_domain = $this->filter_text->filterDomain($domain);
 
         $whois_data = $this->whois->whoislookup($filtered_domain);
 

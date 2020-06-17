@@ -52,8 +52,4 @@ class BaseController
         ];
     }
 
-    public function debug($string)
-    {
-        return '<pre>'. var_dump($string).'</pre>';
-    }
 }
