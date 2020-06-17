@@ -6,9 +6,9 @@
 
 namespace Inc\Pages;
 
-use \Inc\Base\BaseController;
 use \Inc\Base\FilterText;
 use \Inc\Base\WhoisServer;
+use \Inc\Base\BaseController;
 
 class BulkWhoisCheck extends BaseController
 {
@@ -54,7 +54,7 @@ class BulkWhoisCheck extends BaseController
 
         if (($handle = fopen("$this->app_root/upload/domains.csv", "r")) !== false) {
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $all_domain_names[] = $this->filterDomain($data[0]);
+                $all_domain_names[] = $this->filter_text->filterDomain($data[0]);
             }
 
             $unique_domains = array_unique($all_domain_names, SORT_STRING);
