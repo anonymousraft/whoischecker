@@ -44,7 +44,7 @@
       type: 'post',
       success: function(php_script_response)
       {
-              $('#view').append(php_script_response);
+              $('#view').html(php_script_response);
               $("#view").focus();
       }
           });

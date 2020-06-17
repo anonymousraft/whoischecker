@@ -52,48 +52,42 @@ class BulkWhoisCheck extends BaseController
     public function bulkWhoisCheck()
     {
 
-        if (($handle = fopen("$this->app_root/upload/domains.csv", "r")) !== false) 
-        {
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) 
-            {
-                $all_domain_names[] = $this->filterDomain($data[0]);                
+        if (($handle = fopen("$this->app_root/upload/domains.csv", "r")) !== false) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                $all_domain_names[] = $this->filterDomain($data[0]);
             }
 
-            $unique_domains = array_unique($all_domain_names,SORT_STRING);
+            $unique_domains = array_unique($all_domain_names, SORT_STRING);
 
             $unique_domains_reset = array_values($unique_domains);
 
             $num = count($unique_domains_reset);
 
-                for ($c = 0; $c < $num; $c++) 
-                {
+            for ($c = 0; $c < $num; $c++) {
 
-                    usleep($this->sleep_time);
+                usleep($this->sleep_time);
 
-                    $result = $this->whois->whoislookup($unique_domains_reset[$c]);
+                $result = $this->whois->whoislookup($unique_domains_reset[$c]);
 
-                    if (strpos($result, 'Error: No appropriate') !== false) 
-                    {
-                        $export_data = array(
-                            'Domain Name' => trim($data[$c]),
-                            'Whois Server' => '',
-                            'Registrar URL' => '',
-                            'Update Date' => '',
-                            'Update Time' => '',
-                            'Creation Date' => '',
-                            'Creation Time' => '',
-                            'Expiry Date' => '',
-                            'Expiry Time' => '',
-                            'Error' => trim($result)
-                        );
-                    }
-                    else 
-                    {
-                        $export_data = $this->filter_text->get_filtered_data($result);
-                    }
-
-                    $this->all_data[] = $export_data;
+                if (strpos($result, 'Error: No appropriate') !== false) {
+                    $export_data = array(
+                        'Domain Name' => trim($data[$c]),
+                        'Whois Server' => '',
+                        'Registrar URL' => '',
+                        'Update Date' => '',
+                        'Update Time' => '',
+                        'Creation Date' => '',
+                        'Creation Time' => '',
+                        'Expiry Date' => '',
+                        'Expiry Time' => '',
+                        'Error' => trim($result)
+                    );
+                } else {
+                    $export_data = $this->filter_text->get_filtered_data($result);
                 }
+
+                $this->all_data[] = $export_data;
+            }
 
             $_SESSION["domain_data"] = $this->all_data;
 
@@ -108,9 +102,21 @@ class BulkWhoisCheck extends BaseController
 
     public function viewData()
     {
-        echo '<tr><th>Domain Name</th><th>Whois Registrar</th><th>Registrar URL</th><th>Update Date</th><th>Update Time</th><th>Created Date</th><th>Created Time</th><th>Expiry Date</th><th>Expiry Time</th><th>Error</th></tr>';
+
+        $flag = 0;
 
         foreach ($this->all_data as $data) {
+
+            if ($flag === 0) 
+            {
+                echo '<tr>';
+                foreach ($data as $col_head => $value) {
+                    echo '<th>' . $col_head . '</th>';
+                }
+                echo '</tr>';
+                $flag = 1;
+            }
+
             echo '<tr>';
             foreach ($data as $col_head => $value) {
                 echo '<td>' . $value . '</td>';
