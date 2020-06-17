@@ -13,11 +13,12 @@ class BaseController
     public $app_url;
     public $page_titles = [];
     public $dns_record_types = [];
+    public $dns_record_view = [];
 
     public function __construct()
     {
 
-        $this->app_root = $_SERVER['DOCUMENT_ROOT'] ;
+        $this->app_root = $_SERVER['DOCUMENT_ROOT'];
         $this->app_url = $this->appURL();
         $this->pageTitles();
         $this->dnsRecordTypes();
@@ -25,8 +26,8 @@ class BaseController
 
     private function appURL()
     {
-        $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 
-        "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
+        $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
+            "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
 
         return $link;
     }
@@ -72,6 +73,31 @@ class BaseController
             'NAPTR' => DNS_NAPTR,
             'A6' => DNS_A6
         ];
+
+        $this->dns_record_view = [
+            'A' => 'ip',
+            'CAA' => 'value',
+            'CNAME' => '',
+            'MX' => 'target',
+            'NS' => 'target',
+            'PTR' => '',
+            'SOA' => [
+                'mname',
+                'rname'
+            ],
+            'TXT' => 'txt',
+            'AAAA' => 'ipv6',
+            'SRV' => '',
+            'NAPTR' => '',
+            'A6' => ''
+        ];
     }
 
+    public function debug($var)
+    {
+        echo '<pre>';
+        var_dump($var);
+        echo '</pre>';
+        exit;
+    }
 }

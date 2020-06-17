@@ -12,6 +12,7 @@ use \Inc\Base\BaseController;
 class DnsChecker extends BaseController
 {
     public $filter_text;
+    public $dns_records;
 
     public function initiate()
     {
@@ -21,7 +22,7 @@ class DnsChecker extends BaseController
     public function getFormData(string $domain_name, string $dns_record_type)
     {
         $this->filter_text = new FilterText();
-        
+
         $domain = $this->filter_text->is_url($domain_name);
 
         if (!$domain) {
@@ -29,7 +30,7 @@ class DnsChecker extends BaseController
             die();
         }
 
-        $this->checkDnsRecord($this->filter_text->filterDomain($domain),$dns_record_type);
+        $this->checkDnsRecord($this->filter_text->filterDomain($domain), $dns_record_type);
     }
 
     public function template()
@@ -45,11 +46,27 @@ class DnsChecker extends BaseController
     {
         $int_type = $this->dns_record_types[$dns_record_type];
 
-        $dns_record = dns_get_record($domain_name,$int_type);
+        $this->dns_records = dns_get_record($domain_name, $int_type);
 
-        echo '<pre>';
-        var_dump($dns_record);
-        echo '</pre>';
-        
+        //$this->debug($this->dns_records);
+        if(empty($this->dns_records))
+        {
+            echo '<p style="color: #087fb5;font-weight: 500;"><strong>'.$dns_record_type. '</strong>'. ' record not found for ' . $domain_name. '</p>';
+            exit; 
+        }
+
+        $this->getView($this->dns_record_view[$dns_record_type]);
+
+    }
+
+    public function getView($key_value)
+    {        
+            foreach ($this->dns_records as $dns_record) {
+                foreach ($dns_record as $key => $value) {
+                    if ($key == $key_value) {
+                        echo '<p style="color: #087fb5;font-weight: 500;">'.$value . '</p>';
+                    }
+                }
+            }
     }
 }
