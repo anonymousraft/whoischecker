@@ -13,6 +13,10 @@ class DnsChecker extends BaseController
 {
     public $filter_text;
     public $dns_records;
+    public $curl_url;
+    public $cloudflare_dns_data = [];
+    public $dns_record_type;
+    public $domain_name;
 
     public function initiate()
     {
@@ -22,8 +26,11 @@ class DnsChecker extends BaseController
     public function getFormData(string $domain_name, string $dns_record_type)
     {
         $this->filter_text = new FilterText();
+        $this->dns_record_type = $dns_record_type;
+        $this->domain_name = $domain_name;
 
-        $domain = $this->filter_text->is_url($domain_name);
+        $domain = $this->filter_text->is_url($this->domain_name);
+
 
         if (!$domain) {
             echo 'Please Enter a Valid Domain Name: eg. quatervois.io or https://quatervois.io.';
@@ -32,7 +39,10 @@ class DnsChecker extends BaseController
 
         sleep(1);
 
-        $this->checkDnsRecord($this->filter_text->filterDomain($domain), $dns_record_type);
+        $this->curl_url = 'https://cloudflare-dns.com/dns-query?name='. $this->filter_text->filterDomain($domain).'&type='. $this->dns_record_type;
+
+        $this->cloudflareDnsApi($this->curl_url);
+
     }
 
     public function template()
@@ -44,58 +54,46 @@ class DnsChecker extends BaseController
         $this->registerFooterScripts();
     }
 
-    public function checkDnsRecord(string $domain_name, string $dns_record_type)
+
+    public function cloudflareDnsApi(string $url)
     {
-        $int_type = $this->dns_record_types[$dns_record_type];
+        $ch = curl_init();
+        
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('accept: application/dns-json'));
 
-        $this->dns_records = dns_get_record($domain_name, $int_type);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        curl_setopt($ch, CURLOPT_URL, $url);
+        
+        $result = curl_exec($ch);
 
-        //$this->debug($this->dns_records);
+        curl_close($ch);
 
-        if (empty($this->dns_records)) {
-            echo '<p style="color: #087fb5;font-weight: 500;">No <strong>' . $dns_record_type . '</strong>' . ' record found for ' . $domain_name . '</p>';
-            exit;
-        }
+        $this->cloudflare_dns_data = json_decode($result, true);
 
-        $this->getView($this->dns_record_view[$dns_record_type], $dns_record_type);
+        $this->cloudflareApiView($this->cloudflare_dns_data);
     }
 
-    public function getView($key_value, $dns_record_type)
+    public function cloudflareApiView(array $dns_data)
     {
+        if (isset($dns_data['Answer'])) 
+        {
+            $answer_data = $dns_data['Answer'];
 
-        if (is_array($key_value)) {
-            $this->getSoaRecord($key_value);
-            exit;
-        }
+            echo '<h4>' . $this->dns_record_type . ' Records</h4>';
 
-        echo '<h4>' . $dns_record_type . ' Records</h4>';
-        foreach ($this->dns_records as $dns_record) {
-            
-            foreach ($dns_record as $key => $value) {
-                
-                if ($key == $key_value) {
-                    echo '<p style="color: #087fb5;font-weight: 500;">' . $value . '</p>';
-                }
-            }
-        }
-    }
-
-    public function getSoaRecord(array $keys)
-    {
-        $record_type = $this->dns_records[0][$keys[0]];
-
-        if ($record_type === 'SOA') {
-            echo '<h4>' . $record_type . ' Records</h4>';
-            foreach ($this->dns_records as $dns_record) {
-                foreach ($dns_record as $key => $value) {
-                    if ($key === $keys[1]) {
-                        echo '<p style="color: #087fb5;font-weight: 500;">' . $value . '</p>';
-                    } elseif ($key === $keys[2]) {
+            foreach ($answer_data as $data) 
+            {
+                foreach ($data as $key => $value) 
+                {
+                    if ($key == 'data') 
+                    {
                         echo '<p style="color: #087fb5;font-weight: 500;">' . $value . '</p>';
                     }
                 }
             }
+        } else {
+            echo '<p style="color: #087fb5;font-weight: 500;">No <strong>' . $this->dns_record_type . '</strong>' . ' record found for ' . $this->domain_name . '</p>';
         }
-
     }
 }

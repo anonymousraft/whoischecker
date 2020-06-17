@@ -13,7 +13,6 @@ class BaseController
     public $app_url;
     public $page_titles = [];
     public $dns_record_types = [];
-    public $dns_record_view = [];
 
     public function __construct()
     {
@@ -71,26 +70,12 @@ class BaseController
             'AAAA' => DNS_AAAA,
             'SRV' => DNS_SRV,
             'NAPTR' => DNS_NAPTR,
-            'A6' => DNS_A6
-        ];
-
-        $this->dns_record_view = [
-            'A' => 'ip',
-            'CAA' => 'value',
-            'CNAME' => '',
-            'MX' => 'target',
-            'NS' => 'target',
+            'A6' => DNS_A6,
+            'MF' => '',
+            'MD' => '',
+            'MB' => '',
             'PTR' => '',
-            'SOA' => [
-                'type',
-                'mname',
-                'rname'
-            ],
-            'TXT' => 'txt',
-            'AAAA' => 'ipv6',
-            'SRV' => '',
-            'NAPTR' => '',
-            'A6' => ''
+            'NSAP' => ''
         ];
     }
 
