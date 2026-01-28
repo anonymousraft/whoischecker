@@ -1,35 +1,133 @@
-# Bulk WHOIS Checker
-## by Hitendra Singh Rathore
-PHP based bulk WHOIS checker. It supports all the popular TLDs and ccTLDs. Upload a csv file that has the list of domains and extract the spreadsheet as the output. for the .com domains it works effortlessly.
+# Carbon Intelligence
 
-Fixed the issue with .IN TLD. Now it also works with .IN TLDs.
+**Domain Intelligence Platform** — WHOIS Lookup · Bulk Analysis · DNS Tools
 
-## Check DNS Records
-The tool is now able to check the DNS records for domains. You can easily check the A, AAAA, MX, NS, TXT or SOA record for any domain. 
+---
 
-While pointing to new server, it is essential that you carefully look the DNS propogation time. This feature will help you to determine the NS records stored on your ISPs DNS for the domain name you are checking. 
+## What's New (v2.0 - Complete Redesign)
 
-## Required Resources
-1. Composer Installed. See [this](https://www.hostinger.in/tutorials/how-to-install-composer) guide to install composer
-2. Open your command propmt or terminal, Navigate to the bulk whois checker folder and run command `composer install`
-3. Local Server with PHP installed.
-4. Make sure you are connected to the Internet.
-5. Larger list of domains, Increase your PHP execution time to the max.
+**Carbon Intelligence** is a complete reimagining of the original Bulk WHOIS Checker. The application has been rebuilt from the ground up with a modern architecture and enhanced functionality.
 
-### In Case of Socket Error
-If you have large domain list, you might come across the socket error. Socket error is simply due to the firewall rules implemented on the Whois Server.
+### Brand Transformation
 
-In case of socket error, Please increase the value of `sleep_time` parameter in the file `checkwhois.php`
+| Before | After |
+|--------|-------|
+| Bulk WHOIS Checker | **Carbon Intelligence** |
+| Multi-page navigation | Single Page Application (SPA) |
+| Bootstrap UI | Custom lightweight CSS |
 
-change the line `//'sleep_time' => 500000` to `'sleep_time' => 500000`
+### Architecture Changes
 
-The default value is 250000 microseconds i.e. 0.25 Seconds. But you can increase as per your requirement.
+The codebase has been modernized with a clean MVC-style structure:
 
-`1 sec is equal to 1000000 micro seconds`
+```
+whoischecker/
+├── public/              # Web root (point your server here)
+│   ├── index.php        # Single entry point
+│   └── assets/          # CSS, JS, images
+├── src/                 # Application core
+│   ├── Controllers/     # Request handlers
+│   ├── Services/        # Business logic (WHOIS, DNS)
+│   └── Kernel/          # Router, Container
+├── routes/              # Route definitions
+├── templates/           # View templates
+└── vendor/              # Composer dependencies
+```
 
-## Pull requests are welcome
-if you find any issue, or if you any feature idea please create issue. Or if you feel that you can contribute to the project. I welcome pull requests. Make sure you describe the changes in detail.
+---
 
-This tool only extracts the general infomration about a TLDs available on port 43 of WHOIS server. No personal information like Name, Email can be extracted by this tool.
+## Features
 
-### Thank You.
+### Single Domain Lookup
+Instant WHOIS intelligence for any domain with comprehensive data:
+- Domain Name & Registrar
+- Owner Information
+- Creation, Updated & Expiry Dates
+- Name Servers & WHOIS Server
+- Domain Status & DNSSEC
+
+### Bulk Analysis Engine
+Process thousands of domains efficiently:
+- Upload `.txt` or `.csv` files (up to 5,000 domains)
+- Real-time progress tracking
+- CSV Export for complete reports
+
+### DNS Resolver
+Query DNS records across 11 record types:
+- A, AAAA, CNAME, MX, TXT, NS, SOA, PTR, SRV, CAA, ANY
+
+---
+
+## Installation
+
+### Requirements
+- PHP 8.1 or higher
+- Composer
+- Web server (Apache, Nginx, or IIS)
+- Internet connection for WHOIS queries
+
+### Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/anonymousraft/whoischecker.git
+   cd whoischecker
+   ```
+
+2. **Install dependencies**
+   ```bash
+   composer install
+   ```
+
+3. **Configure your web server** to point to the `/public` directory
+
+4. **Access the application** at `http://your-domain/`
+
+---
+
+## Server Configuration
+
+Configuration files are included for all major web servers:
+
+- **Apache**: `.htaccess` in `/public` (requires `mod_rewrite`)
+- **Nginx**: See `nginx.conf.example`
+- **IIS**: `web.config` in `/public` (requires URL Rewrite Module)
+
+---
+
+
+## Configuration
+
+You can customize the application by creating a `.env` file in the project root. Copy the included `.env.example` to start:
+
+```bash
+cp .env.example .env
+```
+
+### Available Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `APP_DEBUG` | `false` | Enable detailed error messages |
+| `BULK_DOMAIN_LIMIT` | `5000` | Maximum domains allowed per bulk upload |
+| `BULK_RATE_DELAY` | `250` | Delay between bulk requests in ms |
+| `WHOIS_TIMEOUT` | `10` | Timeout for WHOIS queries in seconds |
+| `DNS_PROVIDER` | `cloudflare` | DNS provider (`cloudflare` or `google`) |
+
+---
+
+## License
+
+GNU General Public License v3.0 — free to use, modify, and distribute.
+
+---
+
+## Author
+
+Built by [@anonymousraft](https://github.com/anonymousraft)
+
+---
+
+## Contributing
+
+Pull requests are welcome! Create an issue for bugs or feature requests.

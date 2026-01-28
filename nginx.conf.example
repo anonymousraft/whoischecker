@@ -1,0 +1,42 @@
+# Carbon Intelligence - Nginx Configuration
+# Copy this to your nginx server block or sites-available
+
+server {
+    listen 80;
+    server_name your-domain.com;  # Change to your domain
+    root /path/to/whoischecker/public;  # Change to your public directory path
+    index index.php;
+
+    # Gzip Compression
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
+
+    # Static files caching
+    location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Main routing - all requests go to index.php
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # PHP processing
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;  # Adjust PHP version
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Deny access to sensitive files
+    location ~ /\.(ht|git|env) {
+        deny all;
+    }
+
+    # Deny access to vendor and src directories
+    location ~ ^/(vendor|src|routes|templates)/ {
+        deny all;
+    }
+}

@@ -1,3 +1,27 @@
-.phpintel/
+# Composer dependencies
 /vendor/
-/.vscode/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.phpintel/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Debug/Test files
+test_*.php

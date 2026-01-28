@@ -2,15 +2,19 @@
     "name": "hitendra/whoischecker",
     "description": "Bulk whois checker",
     "license": "GPLv3",
-    "authors": [{
-        "name": "Hitendra Rathore",
-        "email": "hitendra1995@gmail.com"
-    }],
-    "require": {},
+    "authors": [
+        {
+            "name": "Hitendra Rathore",
+            "email": "hitendra1995@gmail.com"
+        }
+    ],
+    "require": {
+        "io-developer/php-whois": "^4.0",
+        "vlucas/phpdotenv": "^5.5"
+    },
     "autoload": {
         "psr-4": {
-            "Inc\\": "./inc"
+            "App\\": "src/"
         }
     }
-
 }
