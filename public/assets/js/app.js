@@ -155,6 +155,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Mail Armor Logic
+    const msBtn = document.getElementById('ms-btn');
+    if (msBtn) {
+        msBtn.addEventListener('click', async () => {
+            const domain = document.getElementById('ms-domain').value.trim();
+            if (!domain) return showToast('Please enter a domain', 'error');
+
+            const res = document.getElementById('ms-result');
+            res.innerHTML = '<div style="padding:20px; text-align:center;">Analyzing Security Policy...</div>';
+            res.classList.remove('hidden');
+            msBtn.disabled = true;
+
+            const resp = await apiRequest('/api/email-security', `domain=${encodeURIComponent(domain)}`);
+
+            if (resp.success) {
+                const d = resp.data;
+                const badgeClass = d.assessment.status === 'Secure' ? 'success' : (d.assessment.status === 'Vulnerable' ? 'danger' : 'warning');
+
+                res.innerHTML = `
+                    <div style="padding:20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-subtle); padding-bottom:15px;">
+                            <h4 style="margin:0; font-size:16px;">Security Assessment</h4>
+                            <span class="badge badge-${badgeClass}" style="font-size:14px;">${d.assessment.status}</span>
+                        </div>
+                        
+                        <p style="margin-bottom:20px; color:var(--text-main); font-size:15px;">
+                            ${d.assessment.summary}
+                        </p>
+
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                            <div style="background:var(--bg-app); padding:15px; border-radius:6px; border:1px solid var(--border-subtle);">
+                                <div style="font-weight:600; margin-bottom:8px; color:var(--text-muted); font-size:12px;">SPF RECORD</div>
+                                <div style="font-family:monospace; word-break:break-all; font-size:13px; margin-bottom:8px;">${d.spf.raw || '<span class="text-danger">Missing</span>'}</div>
+                                <div style="font-size:13px;">Policy: <strong>${d.spf.all_mechanism || 'N/A'}</strong></div>
+                            </div>
+
+                            <div style="background:var(--bg-app); padding:15px; border-radius:6px; border:1px solid var(--border-subtle);">
+                                <div style="font-weight:600; margin-bottom:8px; color:var(--text-muted); font-size:12px;">DMARC RECORD</div>
+                                <div style="font-family:monospace; word-break:break-all; font-size:13px; margin-bottom:8px;">${d.dmarc.raw || '<span class="text-danger">Missing</span>'}</div>
+                                <div style="font-size:13px;">Policy: <strong>${d.dmarc.policy || 'N/A'}</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                res.innerHTML = `<div style="padding:20px; color:var(--danger);">Error: ${resp.error}</div>`;
+            }
+            msBtn.disabled = false;
+        });
+    }
+
     // Bulk Logic / Variables
     let bulkRows = []; // Store results for export
 

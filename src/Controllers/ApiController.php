@@ -75,6 +75,25 @@ class ApiController extends BaseController
         }
     }
 
+    public function emailSecurity(): void
+    {
+        try {
+            $domain = $_POST['domain'] ?? '';
+
+            if (empty($domain)) {
+                $this->json(['success' => false, 'error' => 'Domain is required'], 400);
+                return;
+            }
+
+            $service = new \App\Services\MailSecurityService();
+            $result = $service->analyze($domain);
+
+            $this->json(['success' => true, 'data' => $result]);
+        } catch (\Throwable $e) {
+            $this->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function bulkProcess(): void
     {
         // For simplicity in this v5.0 SPA model, we'll process via individual /api/lookup calls
